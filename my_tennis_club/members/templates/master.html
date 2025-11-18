@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* ... (Todo tu CSS se mantiene igual) ... */
+        /* Base Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #36393f; color: #dcddde; height: 100vh; overflow: hidden; }
+        .container { display: flex; height: 100vh; }
+        .sidebar { width: 240px; background: #2f3136; display: flex; flex-direction: column; border-right: 1px solid #202225; position: relative; }
+        .server-header { padding: 15px; border-bottom: 1px solid #202225; background: #2f3136; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+        .server-header:hover { background: #34373c; }
+        .server-name { font-weight: 600; font-size: 16px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .channel-groups { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+        .sidebar-section { padding: 16px 8px 0 16px; }
+        .section-title { font-size: 11px; text-transform: uppercase; color: #96989d; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+        .add-btn { font-size: 18px; color: #96989d; cursor: pointer; transition: color 0.2s; line-height: 1; }
+        .add-btn:hover { color: #dcddde; }
+        .channel-list { list-style: none; padding-right: 8px; }
+        .channel-item { padding: 6px 8px; margin: 2px 0; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; color: #96989d; user-select: none; }
+        .channel-item:hover { background: #3a3c43; color: #dcddde; }
+        .channel-item.active { background: #404249; color: #fff; }
+        .channel-icon { font-size: 18px; line-height: 1; width: 18px; text-align: center; }
+        .channel-name { font-size: 15px; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .channel-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
+        .channel-item:hover .channel-actions, .channel-item.active .channel-actions { opacity: 1; }
+        .channel-actions button { background: none; border: none; color: #96989d; cursor: pointer; font-size: 16px; padding: 2px; }
+        .channel-actions button:hover { color: #dcddde; }
+        .user-footer { background: #292b2f; padding: 10px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; border-top: 1px solid #202225; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #5865f2; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+        .user-info span { display: block; line-height: 1.2; }
+        .user-name { font-weight: 600; color: #fff; font-size: 14px; }
+        .user-status { font-size: 12px; color: #96989d; }
+        .main-content { flex: 1; display: flex; flex-direction: column; background: #36393f; }
+        .content-header { height: 48px; border-bottom: 1px solid #202225; display: flex; align-items: center; padding: 0 16px; background: #36393f; flex-shrink: 0; }
+        .content-header-title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 16px; color: #fff; }
+        .content-body { flex: 1; overflow-y: auto; padding: 20px; }
+        .person-card { background: #2f3136; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #5865f2; transition: transform 0.2s, box-shadow 0.2s; }
+        .person-card:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .person-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .person-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #5865f2 0%, #7289da 100%); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: #fff; }
+        .person-info h3 { color: #fff; font-size: 18px; margin-bottom: 4px; }
+        .person-badge { background: #5865f2; color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; text-transform: uppercase; font-weight: 600; }
+        .person-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+        .detail-item { display: flex; flex-direction: column; gap: 4px; }
+        .detail-label { font-size: 11px; color: #96989d; text-transform: uppercase; font-weight: 600; }
+        .detail-value { color: #dcddde; font-size: 14px; }
+        .add-form { background: #2f3136; border-radius: 8px; padding: 24px; margin-bottom: 16px; }
+        .add-form h3 { color: #fff; margin-bottom: 16px; font-size: 18px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 12px; color: #b9bbbe; text-transform: uppercase; font-weight: 600; }
+        .form-group input { background: #202225; border: 1px solid #202225; border-radius: 4px; padding: 10px; color: #dcddde; font-size: 14px; transition: border-color 0.2s; }
+        .form-group input:focus { outline: none; border-color: #5865f2; }
+        .form-actions { display: flex; gap: 12px; margin-top: 16px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 14px; }
+        .btn-primary { background: #5865f2; color: #fff; }
+        .btn-primary:hover { background: #4752c4; }
+        .btn-secondary { background: #4e5058; color: #fff; }
+        .btn-secondary:hover { background: #5d5f69; }
+        .btn-danger { background: #ed4245; color: #fff; }
+        .btn-danger:hover { background: #c03537; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #96989d; }
+        .empty-state h3 { font-size: 20px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+        .content-body::-webkit-scrollbar, .channel-groups::-webkit-scrollbar { width: 8px; }
+        .content-body::-webkit-scrollbar-track, .channel-groups::-webkit-scrollbar-track { background: #2f3136; }
+        .content-body::-webkit-scrollbar-thumb, .channel-groups::-webkit-scrollbar-thumb { background: #202225; border-radius: 4px; }
+        .content-body::-webkit-scrollbar-thumb:hover, .channel-groups::-webkit-scrollbar-thumb:hover { background: #1a1c1f; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="server-header" onclick="viewAllPeople()">
+                <div class="server-name">🎮 Sistema Master</div>
+            </div>
+
+            <div class="channel-groups">
+                <div class="sidebar-section">
+                    <div class="section-title">📋 Eventos</div>
+                    <ul class="channel-list">
+                        <li class="channel-item" onclick="changeContent('eventos', '📋 Eventos')">
+                            <span class="channel-icon">#</span>
+                            <span class="channel-name">eventos-info</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="section-title">🛠️ Mejoras del servidor</div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="section-title">Canales de texto</div>
+                    <ul class="channel-list">
+                        <li class="channel-item" onclick="changeContent('welcome', '🖼️ welcome')">
+                            <span class="channel-icon">🖼️</span>
+                            <span class="channel-name">welcom</span>
+                        </li>
+                        <li class="channel-item" onclick="changeContent('reglas', '📜 reglas')">
+                            <span class="channel-icon">📜</span>
+                            <span class="channel-name">reglas</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        👥 Personas
+                        <span class="add-btn" onclick="viewAddForm()">+</span>
+                    </div>
+                    <ul class="channel-list" id="personChannels"></ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="section-title">🔊 Canales de voz</div>
+                    <ul class="channel-list">
+                        <li class="channel-item" onclick="changeContent('voz', '🔊 General')">
+                            <span class="channel-icon">🔊</span>
+                            <span class="channel-name">General</span>
+                        </li>
+                    </ul>
+                </div>
+            </div> 
+            <div class="user-footer">
+                <div class="user-avatar">SM</div>
+                <div class="user-info">
+                    <span class="user-name">Master</span>
+                    <span class="user-status">Online</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="content-header">
+                <div class="content-header-title">
+                    <span id="headerIcon">👥</span>
+                    <span id="headerTitle">Gestión de Personas</span>
+                </div>
+            </div>
+
+            <div class="content-body" id="contentBody">
+                
+                {% block content %}
+
+                <div class="add-form" id="addForm" style="display: none;">
+                    <h3>➕ Añadir Nueva Persona</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstname">Nombre</label>
+                            <input type="text" id="firstname" placeholder="Ingrese el nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Apellido</label>
+                            <input type="text" id="lastname" placeholder="Ingrese el apellido" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="text" id="phone" placeholder="+57 300 123 4567">
+                        </div>
+                        <div class="form-group">
+                            <label for="joined_date">Fecha de Registro</label>
+                            <input type="date" id="joined_date">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="video_game">Videojuego Favorito</label>
+                            <input type="text" id="video_game" placeholder="Ej: The Witcher 3">
+                        </div>
+                        <div class="form-group">
+                            <label for="music">Música Favorita</label>
+                            <input type="text" id="music" placeholder="Ej: Rock">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="processor">Procesador Favorito</label>
+                            <input type="text" id="processor" placeholder="AMD o Intel">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="addPerson()">Guardar</button>
+                        <button class="btn btn-secondary" onclick="viewAllPeople()">Cancelar</button>
+                    </div>
+                </div>
+
+                <div id="personListContainer">
+                    <div id="personList"></div>
+                    <div class="empty-state" id="emptyState">
+                        <h3>👥 No hay personas registradas</h3>
+                        <p>Haz clic en el botón **+** en la sección "Personas" para agregar una nueva.</p>
+                    </div>
+                </div>
+                
+                <div id="otherContent" style="display: none;">
+                    <div class="empty-state">
+                        <h3 id="otherContentTitle"></h3>
+                        <p>Este es el contenido de simulación para el canal **<span id="otherContentName"></span>**.</p>
+                        <p>Aquí es donde se cargaría la información real del canal.</p>
+                    </div>
+                </div>
+
+                {% endblock %}
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // (Tu script se mantiene igual, manejará el contenido por defecto)
+        let persons = JSON.parse(localStorage.getItem('personsData')) || [];
+        let currentView = 'list';
+
+        function init() {
+            updatePersonChannels();
+            viewAllPeople();
+        }
+
+        function savePersons() {
+            localStorage.setItem('personsData', JSON.stringify(persons));
+        }
+
+        function clearForm() {
+            document.getElementById('firstname').value = '';
+            document.getElementById('lastname').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('joined_date').value = '';
+            document.getElementById('video_game').value = '';
+            document.getElementById('music').value = '';
+            document.getElementById('processor').value = '';
+        }
+
+        function viewAddForm() {
+            currentView = 'add';
+            const headerTitle = document.getElementById('headerTitle');
+            if(headerTitle) headerTitle.textContent = 'Añadir Persona';
+            const headerIcon = document.getElementById('headerIcon');
+            if(headerIcon) headerIcon.textContent = '➕';
+            
+            const addForm = document.getElementById('addForm');
+            if(addForm) addForm.style.display = 'block';
+            
+            const listContainer = document.getElementById('personListContainer');
+            if(listContainer) listContainer.style.display = 'none';
+            
+            const other = document.getElementById('otherContent');
+            if(other) other.style.display = 'none';
+            
+            document.querySelectorAll('.channel-item').forEach(item => item.classList.remove('active'));
+            const fn = document.getElementById('firstname');
+            if(fn) fn.focus();
+            clearForm();
+        }
+
+        function viewAllPeople() {
+            currentView = 'list';
+            const headerTitle = document.getElementById('headerTitle');
+            if(headerTitle) headerTitle.textContent = 'Gestión de Personas';
+            const headerIcon = document.getElementById('headerIcon');
+            if(headerIcon) headerIcon.textContent = '👥';
+            
+            const addForm = document.getElementById('addForm');
+            if(addForm) addForm.style.display = 'none';
+            
+            const listContainer = document.getElementById('personListContainer');
+            if(listContainer) listContainer.style.display = 'block';
+            
+            const other = document.getElementById('otherContent');
+            if(other) other.style.display = 'none';
+            
+            updatePersonList();
+            updateChannelActiveState('Personas');
+        }
+
+        function changeContent(id, title) {
+            currentView = 'other';
+            const iconMatch = title.match(/(\S+)\s/);
+            const icon = iconMatch ? iconMatch[1] : '#';
+            const name = title.replace(icon, '').trim();
+
+            document.getElementById('headerTitle').textContent = name;
+            document.getElementById('headerIcon').textContent = icon;
+            
+            const addForm = document.getElementById('addForm');
+            if(addForm) addForm.style.display = 'none';
+            
+            const listContainer = document.getElementById('personListContainer');
+            if(listContainer) listContainer.style.display = 'none';
+            
+            const otherContent = document.getElementById('otherContent');
+            if(otherContent) {
+                otherContent.style.display = 'block';
+                document.getElementById('otherContentTitle').textContent = `Canal ${name}`;
+                document.getElementById('otherContentName').textContent = name;
+            }
+
+            updateChannelActiveState(name);
+        }
+
+        function updateChannelActiveState(channelName) {
+            document.querySelectorAll('.channel-item').forEach(item => {
+                const nameElement = item.querySelector('.channel-name');
+                const isPersonChannel = item.parentElement.id === 'personChannels';
+                let liName = isPersonChannel ? nameElement.textContent.trim() : nameElement.textContent.trim();
+
+                if (channelName === 'Personas' && item.querySelector('.section-title')) {
+                     // lógica sidebar
+                } else if (liName === channelName || liName.includes(channelName)) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function addPerson() {
+            const firstname = document.getElementById('firstname').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const joined_date = document.getElementById('joined_date').value.trim();
+            const video_game = document.getElementById('video_game').value.trim();
+            const music = document.getElementById('music').value.trim();
+            const processor = document.getElementById('processor').value.trim();
+
+            if (!firstname || !lastname) {
+                alert('Por favor ingresa al menos el nombre y apellido.');
+                return;
+            }
+
+            const newPerson = {
+                id: Date.now(),
+                firstname, lastname,
+                phone: phone || 'No especificado',
+                joined_date: joined_date || new Date().toISOString().split('T')[0],
+                video_game_favorite: video_game || 'No especificado',
+                music_favorite: music || 'No especificado',
+                amd_intel: processor || 'No especificado'
+            };
+
+            persons.push(newPerson);
+            savePersons();
+            clearForm();
+            updatePersonChannels();
+            viewAllPeople();
+        }
+
+        function deletePerson(id, event) {
+            if (event) event.stopPropagation();
+            if (confirm('¿Estás seguro de eliminar a esta persona?')) {
+                persons = persons.filter(p => p.id !== id);
+                savePersons();
+                updatePersonChannels();
+                viewAllPeople();
+            }
+        }
+
+        function showPerson(id) {
+            currentView = 'person_detail';
+            const person = persons.find(p => p.id === id);
+            if (person) {
+                document.getElementById('headerTitle').textContent = `${person.firstname} ${person.lastname}`;
+                document.getElementById('headerIcon').textContent = '👤';
+                document.getElementById('addForm').style.display = 'none';
+                document.getElementById('otherContent').style.display = 'none';
+                document.getElementById('personListContainer').style.display = 'block';
+                document.getElementById('emptyState').style.display = 'none';
+
+                const initials = person.firstname.charAt(0) + person.lastname.charAt(0);
+                document.getElementById('personList').innerHTML = `
+                    <div class="person-card">
+                        <div class="person-header">
+                            <div class="person-avatar">${initials}</div>
+                            <div class="person-info">
+                                <h3>${person.firstname} ${person.lastname}</h3>
+                                <span class="person-badge">Miembro</span>
+                            </div>
+                        </div>
+                        <div class="person-details">
+                             <p><strong>Teléfono:</strong> ${person.phone}</p>
+                             <p><strong>Registro:</strong> ${person.joined_date}</p>
+                             <p><strong>Juego:</strong> ${person.video_game_favorite}</p>
+                        </div>
+                        <div class="form-actions" style="margin-top: 16px;">
+                            <button class="btn btn-danger" onclick="deletePerson(${person.id})">🗑️ Eliminar</button>
+                            <button class="btn btn-secondary" onclick="viewAllPeople()">↩️ Ver Todos</button>
+                        </div>
+                    </div>
+                `;
+                updateChannelActiveState(`${person.firstname} ${person.lastname}`);
+            }
+        }
+
+        function updatePersonChannels() {
+            const channelList = document.getElementById('personChannels');
+            if (!channelList) return;
+            channelList.innerHTML = '';
+            persons.forEach(person => {
+                const initials = person.firstname.charAt(0) + person.lastname.charAt(0);
+                const li = document.createElement('li');
+                li.className = 'channel-item';
+                li.innerHTML = `
+                    <span class="channel-icon">${initials}</span>
+                    <span class="channel-name">${person.firstname} ${person.lastname}</span>
+                    <div class="channel-actions">
+                        <button onclick="deletePerson(${person.id}, event)">🗑️</button>
+                    </div>
+                `;
+                li.onclick = () => showPerson(person.id);
+                channelList.appendChild(li);
+            });
+        }
+
+        function updatePersonList() {
+            const personList = document.getElementById('personList');
+            const emptyState = document.getElementById('emptyState');
+            if (!personList || currentView !== 'list') return;
+
+            if (persons.length === 0) {
+                personList.innerHTML = '';
+                if(emptyState) emptyState.style.display = 'block';
+                return;
+            }
+            if(emptyState) emptyState.style.display = 'none';
+            personList.innerHTML = '';
+            persons.forEach(person => {
+                const initials = person.firstname.charAt(0) + person.lastname.charAt(0);
+                const card = document.createElement('div');
+                card.className = 'person-card';
+                card.onclick = () => showPerson(person.id);
+                card.style.cursor = 'pointer';
+                card.innerHTML = `
+                    <div class="person-header">
+                        <div class="person-avatar">${initials}</div>
+                        <div class="person-info">
+                            <h3>${person.firstname} ${person.lastname}</h3>
+                            <span class="person-badge">Miembro</span>
+                        </div>
+                    </div>
+                `;
+                personList.appendChild(card);
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
