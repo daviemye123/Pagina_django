@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+
+        .error-number {
+            font-size: 150px;
+            font-weight: bold;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            animation: shake 0.5s infinite;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            10% { transform: translateX(-10px) rotate(-2deg); }
+            20% { transform: translateX(10px) rotate(2deg); }
+            30% { transform: translateX(-10px) rotate(-2deg); }
+            40% { transform: translateX(10px) rotate(2deg); }
+            50% { transform: translateX(-10px) rotate(-2deg); }
+            60% { transform: translateX(10px) rotate(2deg); }
+            70% { transform: translateX(-10px) rotate(-2deg); }
+            80% { transform: translateX(10px) rotate(2deg); }
+            90% { transform: translateX(-5px) rotate(-1deg); }
+        }
+
+        .main-text {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .sub-text {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .emoji {
+            font-size: 60px;
+            animation: bounce 1s infinite;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-home {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 50px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeIn 2s ease-in;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #f0f0f0;
+        }
+
+        /* Partículas flotantes */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        .particle:nth-child(1) { left: 10%; width: 10px; height: 10px; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 30%; width: 15px; height: 15px; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 50%; width: 8px; height: 8px; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 70%; width: 12px; height: 12px; animation-delay: 1s; }
+        .particle:nth-child(5) { left: 90%; width: 10px; height: 10px; animation-delay: 3s; }
+    </style>
+</head>
+<body>
+    <!-- Partículas flotantes -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="container">
+        <div class="error-number">404</div>
+        <div class="emoji">🤔</div>
+        <h1 class="main-text">What are you doing here, bro?</h1>
+        <p class="sub-text">This page doesn't exist... yet!</p>
+        <a href="/" class="btn-home">Go Back Home</a>
+    </div>
+</body>
+</html>

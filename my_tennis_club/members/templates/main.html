@@ -1,0 +1,56 @@
+{% extends "master.html" %}
+
+{% block title %}
+  My server
+{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: -20px; padding: 20px;">
+  
+  <div style="text-align: center; color: white; max-width: 800px; padding: 40px;">
+    
+    <div style="font-size: 80px; margin-bottom: 20px;">😛</div>
+    
+    <h1 style="font-size: 48px; font-weight: bold; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+      MY server
+    </h1>
+    
+    <p style="font-size: 20px; margin-bottom: 40px; opacity: 0.9;">
+      Join our community 
+    </p>
+    
+    <a href="members/" style="display: inline-block; background: white; color: #667eea; padding: 16px 60px; border-radius: 30px; text-decoration: none; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; cursor: pointer;">
+      Welcome
+    </a>
+    
+    <p style="margin-top: 30px; font-size: 14px; opacity: 0.8;">
+      Discover all our members and activities
+    </p>
+    
+  </div>
+  
+</div>
+
+<style>
+  /* Efecto hover para el botón */
+  a[href="members/"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  div[style*="text-align: center"] {
+    animation: fadeIn 0.8s ease-out;
+  }
+</style>
+{% endblock %}
