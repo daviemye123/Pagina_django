@@ -5,7 +5,7 @@ class Member(models.Model):
   lastname = models.CharField(max_length=255)
   phone = models.IntegerField(null=True)
   joined_date = models.DateField(null=True)
-  video_game_favorite = models.CharField(max_length=100, null=True)
+  video_game_favorite = models.CharField(max_length=100)
   amd_intel = models.CharField(max_length=255, null=True)
   music_favorite=models.BooleanField(max_length=255)
   def __str__(self):

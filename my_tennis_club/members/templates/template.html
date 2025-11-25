@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ejemplo de Variables en Plantillas Django</title>
+</head>
+<body>
+
+    <h2>Llamar variables de un contexto (como una lista)</h2>
+    {% if fruits %}
+        {% for x in fruits %}
+            <p>Fruta: **{{ x }}**</p>
+        {% endfor %}
+    {% else %}
+        <p>No hay frutas para mostrar.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Crear y usar una variable temporal dentro de 'with'</h2>
+    {% with firstname="Tobias" %}
+        <h3>Hola **{{ firstname }}**, ¿cómo estás?</h3>
+    {% endwith %}
+
+    <p>**{{ firstname }}** (Este valor estará vacío ya que 'firstname' solo existe dentro del 'with' anterior).</p>
+
+    <hr>
+
+    <h2>Iterar sobre objetos dentro de una lista</h2>
+    {% if mymembers %}
+        <ul>
+            {% for member in mymembers %}
+                <li>Nombre: **{{ member.firstname }}**</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay miembros para mostrar.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Etiquetas especiales</h2>
+    <p>Token CSRF (necesario en formularios POST):</p>
+    {% csrf_token %}
+
+    <p>Fecha y hora actual (formato predeterminado o especificado):</p>
+    <p>Hoy es: **{% now "DATE_FORMAT" %}**</p>
+
+    <p>Ejemplo de la etiqueta 'verbatim' (para mostrar código de plantilla):</p>
+    {% verbatim %}
+        <p>Esto no se procesará: {{ variable }} o {% tag %}</p>
+    {% endverbatim %}
+
+    {% for miembro in miembros %}
+    {% if miemnbro.firstname == "Yamith"%}
+        <h1>Hola {{miembro.firstname}}</h1>
+    {% else %}
+        <h1>xao tilin</h1>
+    {% endif %}
+
+    {% include "black_friday.html" %}
+
+</body>
+</html>
