@@ -1,0 +1,353 @@
+/* Importar fuente manga-style */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Roboto:wght@400;700&display=swap');
+
+/* Reset y base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    color: #1a1a1a;
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+.manga-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Hero Image Section */
+.hero-image-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 40px;
+    border: 6px solid #000;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 4px #fff,
+        inset 0 0 0 8px #000;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    z-index: 2;
+    text-shadow: 
+        4px 4px 0 #000,
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000;
+}
+
+.main-title {
+    font-family: 'Bangers', cursive;
+    font-size: 5rem;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+/* Paneles manga */
+.manga-panel {
+    background: #fff;
+    border: 5px solid #000;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 
+        8px 8px 0 rgba(0, 0, 0, 0.1),
+        inset 0 0 0 3px #fff,
+        inset 0 0 0 6px #000;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.manga-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        12px 12px 0 rgba(0, 0, 0, 0.15),
+        inset 0 0 0 3px #fff,
+        inset 0 0 0 6px #000;
+}
+
+/* Acentos de color */
+.accent-purple { border-color: #8b5cf6; }
+.accent-red { border-color: #ef4444; }
+.accent-blue { border-color: #3b82f6; }
+.accent-green { border-color: #10b981; }
+.accent-orange { border-color: #f97316; }
+.accent-pink { border-color: #ec4899; }
+.accent-cyan { border-color: #06b6d4; }
+
+/* Headers de paneles */
+.panel-header {
+    background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+    color: #fff;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #000;
+}
+
+.panel-header h2 {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.panel-number {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    background: #fff;
+    color: #000;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #000;
+    border-radius: 50%;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Contenido de paneles */
+.panel-content {
+    padding: 30px;
+}
+
+/* Tablas manga */
+.manga-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 3px solid #000;
+}
+
+.manga-table thead {
+    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+    color: #fff;
+}
+
+.manga-table th {
+    padding: 15px;
+    font-family: 'Permanent Marker', cursive;
+    text-transform: uppercase;
+    border: 2px solid #000;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}
+
+.manga-table td {
+    padding: 12px 15px;
+    border: 2px solid #000;
+    background: #fff;
+    transition: background 0.3s ease;
+}
+
+.manga-table tbody tr:nth-child(even) td {
+    background: #f9f9f9;
+}
+
+.manga-table tbody tr:hover td {
+    background: #fef3c7;
+}
+
+/* Tabla compacta */
+.manga-table.compact td {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+/* Chips */
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.manga-chip {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #000;
+    padding: 10px 20px;
+    border: 3px solid #000;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.manga-chip:hover {
+    transform: translateY(-3px) rotate(2deg);
+}
+
+/* Cards grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.member-card {
+    background: linear-gradient(135deg, #fff 0%, #f9fafb 100%);
+    border: 4px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-5px) rotate(-1deg);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.member-card h3 {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    border-bottom: 3px solid #000;
+    padding-bottom: 8px;
+}
+
+.member-card p {
+    margin: 8px 0;
+    font-size: 0.95rem;
+}
+
+.member-card strong {
+    color: #4a4a4a;
+}
+
+/* Lista */
+.list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fff;
+    border: 3px solid #000;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.list-item:hover {
+    transform: translateX(10px);
+    background: #fef3c7;
+}
+
+.list-number {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    background: #000;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.list-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.list-info strong {
+    font-size: 1.1rem;
+    color: #1a1a1a;
+}
+
+.list-game {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+/* Footer */
+.manga-footer {
+    text-align: center;
+    padding: 30px;
+    margin-top: 40px;
+    border-top: 5px solid #000;
+    background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+    color: #fff;
+    font-family: 'Permanent Marker', cursive;
+    border-radius: 10px;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 3rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .hero-image-container {
+        height: 300px;
+    }
+    
+    .panel-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .panel-number {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+    
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .manga-table {
+        font-size: 0.85rem;
+    }
+    
+    .manga-table th,
+    .manga-table td {
+        padding: 8px;
+    }
+}

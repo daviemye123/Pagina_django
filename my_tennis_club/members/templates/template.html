@@ -1,63 +1,229 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Ejemplo de Variables en Plantillas Django</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database</title>
+    <link rel="stylesheet" href="{% static 'template.css' %}">
 </head>
 <body>
+    <div class="manga-container">
+        <!-- Espacio para imagen principal -->
+        <div class="hero-image-container">
+             <img src="{% static 'anime.jpeg' %}" alt="Hero Image" class="hero-image">
+            <div class="hero-overlay">
+                <h1 class="main-title">Database Queries</h1>
+                <p class="subtitle">Sistema de Gestión de Miembros</p>
+            </div>
+        </div>
 
-    <h2>Llamar variables de un contexto (como una lista)</h2>
-    {% if fruits %}
-        {% for x in fruits %}
-            <p>Fruta: **{{ x }}**</p>
-        {% endfor %}
-    {% else %}
-        <p>No hay frutas para mostrar.</p>
-    {% endif %}
+        <!-- Panel: Todos los miembros -->
+        <div class="manga-panel">
+            <div class="panel-header">
+                <h2>Todos los Miembros</h2>
+                <span class="panel-number">01</span>
+            </div>
+            <div class="panel-content">
+                <table class="manga-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Videojuego Favorito</th>
+                            <th>AMD/Intel</th>
+                            <th>Música Favorita</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.firstname|default:"N/A" }}</td>
+                            <td>{{ member.lastname|default:"N/A" }}</td>
+                            <td>{{ member.phone|default:"N/A" }}</td>
+                            <td>{{ member.joined_date|date:"d/m/Y"|default:"N/A" }}</td>
+                            <td>{{ member.video_game_favorite|default:"N/A" }}</td>
+                            <td>{{ member.amd_intel|default:"N/A" }}</td>
+                            <td>{{ member.music_favorite|default:"N/A" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <hr>
+        <!-- Panel: Columna de videojuegos -->
+        <div class="manga-panel accent-purple">
+            <div class="panel-header">
+                <h2>Videojuegos Favoritos</h2>
+                <span class="panel-number">02</span>
+            </div>
+            <div class="panel-content">
+                <div class="chip-container">
+                    {% for item in columna %}
+                    <span class="manga-chip">{{ item.video_game_favorite|default:"Sin videojuego" }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-    <h2>Crear y usar una variable temporal dentro de 'with'</h2>
-    {% with firstname="Tobias" %}
-        <h3>Hola **{{ firstname }}**, ¿cómo estás?</h3>
-    {% endwith %}
+        <!-- Panel: Filtro por nombre -->
+        <div class="manga-panel accent-red">
+            <div class="panel-header">
+                <h2>Búsqueda: "Ranni"</h2>
+                <span class="panel-number">03</span>
+            </div>
+            <div class="panel-content">
+                <div class="card-grid">
+                    {% for member in nombre %}
+                    <div class="member-card">
+                        <h3>{{ member.firstname|default:"Sin nombre" }} {{ member.lastname|default:"" }}</h3>
+                        <p><strong>ID:</strong> {{ member.id }}</p>
+                        <p><strong>Juego:</strong> {{ member.video_game_favorite|default:"N/A" }}</p>
+                        <p><strong>Teléfono:</strong> {{ member.phone|default:"N/A" }}</p>
+                        <p><strong>Preferencia:</strong> {{ member.amd_intel|default:"N/A" }}</p>
+                        <p><strong>Música:</strong> {{ member.music_favorite|default:"N/A" }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-    <p>**{{ firstname }}** (Este valor estará vacío ya que 'firstname' solo existe dentro del 'with' anterior).</p>
+        <!-- Panel: Query con OR -->
+        <div class="manga-panel accent-blue">
+            <div class="panel-header">
+                <h2>Búsqueda: Ranni O Tilin</h2>
+                <span class="panel-number">04</span>
+            </div>
+            <div class="panel-content">
+                <table class="manga-table compact">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Videojuego</th>
+                            <th>Música</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in mydata %}
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.firstname|default:"N/A" }}</td>
+                            <td>{{ member.lastname|default:"N/A" }}</td>
+                            <td>{{ member.video_game_favorite|default:"N/A" }}</td>
+                            <td>{{ member.music_favorite|default:"N/A" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <hr>
+        <!-- Panel: Filtro por apellido -->
+        <div class="manga-panel accent-green">
+            <div class="panel-header">
+                <h2>Apellido: "Caria"</h2>
+                <span class="panel-number">05</span>
+            </div>
+            <div class="panel-content">
+                <div class="card-grid">
+                    {% for member in apellido %}
+                    <div class="member-card">
+                        <h3>{{ member.firstname|default:"Sin nombre" }} {{ member.lastname|default:"" }}</h3>
+                        <p><strong>ID:</strong> {{ member.id }}</p>
+                        <p><strong>Juego:</strong> {{ member.video_game_favorite|default:"N/A" }}</p>
+                        <p><strong>Teléfono:</strong> {{ member.phone|default:"N/A" }}</p>
+                        <p><strong>Preferencia:</strong> {{ member.amd_intel|default:"N/A" }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-    <h2>Iterar sobre objetos dentro de una lista</h2>
-    {% if mymembers %}
-        <ul>
-            {% for member in mymembers %}
-                <li>Nombre: **{{ member.firstname }}**</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No hay miembros para mostrar.</p>
-    {% endif %}
+        <!-- Panel: ID mayor o igual a 22 -->
+        <div class="manga-panel accent-orange">
+            <div class="panel-header">
+                <h2>ID ≥ 22</h2>
+                <span class="panel-number">06</span>
+            </div>
+            <div class="panel-content">
+                <table class="manga-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Videojuego</th>
+                            <th>AMD/Intel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in mayor_3 %}
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.firstname|default:"N/A" }}</td>
+                            <td>{{ member.lastname|default:"N/A" }}</td>
+                            <td>{{ member.video_game_favorite|default:"N/A" }}</td>
+                            <td>{{ member.amd_intel|default:"N/A" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <hr>
+        <!-- Panel: Ordenado alfabéticamente -->
+        <div class="manga-panel accent-pink">
+            <div class="panel-header">
+                <h2>Ordenado por Nombre</h2>
+                <span class="panel-number">07</span>
+            </div>
+            <div class="panel-content">
+                <div class="list-container">
+                    {% for member in ordenado %}
+                    <div class="list-item">
+                        <span class="list-number">{{ forloop.counter }}</span>
+                        <div class="list-info">
+                            <strong>{{ member.firstname|default:"Sin nombre" }} {{ member.lastname|default:"" }}</strong>
+                            <span class="list-game">🎮 {{ member.video_game_favorite|default:"Sin videojuego" }}</span>
+                            <span class="list-game">💻 {{ member.amd_intel|default:"N/A" }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-    <h2>Etiquetas especiales</h2>
-    <p>Token CSRF (necesario en formularios POST):</p>
-    {% csrf_token %}
+        <!-- Panel: Filtro con IN -->
+        <div class="manga-panel accent-cyan">
+            <div class="panel-header">
+                <h2>Nombres: Ranni, Davi, Ana</h2>
+                <span class="panel-number">08</span>
+            </div>
+            <div class="panel-content">
+                <div class="card-grid">
+                    {% for member in filtrar_con_in %}
+                    <div class="member-card">
+                        <h3>{{ member.firstname|default:"Sin nombre" }} {{ member.lastname|default:"" }}</h3>
+                        <p><strong>ID:</strong> {{ member.id }}</p>
+                        <p><strong>Juego:</strong> {{ member.video_game_favorite|default:"N/A" }}</p>
+                        <p><strong>Fecha:</strong> {{ member.joined_date|date:"d/m/Y"|default:"N/A" }}</p>
+                        <p><strong>Música:</strong> {{ member.music_favorite|default:"N/A" }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-    <p>Fecha y hora actual (formato predeterminado o especificado):</p>
-    <p>Hoy es: **{% now "DATE_FORMAT" %}**</p>
-
-    <p>Ejemplo de la etiqueta 'verbatim' (para mostrar código de plantilla):</p>
-    {% verbatim %}
-        <p>Esto no se procesará: {{ variable }} o {% tag %}</p>
-    {% endverbatim %}
-
-    {% for miembro in miembros %}
-    {% if miemnbro.firstname == "Yamith"%}
-        <h1>Hola {{miembro.firstname}}</h1>
-    {% else %}
-        <h1>xao tilin</h1>
-    {% endif %}
-
-    {% include "black_friday.html" %}
-
+        <footer class="manga-footer">
+            <p>Database uwu</p>
+        </footer>
+    </div>
 </body>
 </html>
